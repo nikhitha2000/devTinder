@@ -1,27 +1,27 @@
 const express = require('express');
 
 const app = express();
+const {adminauth,userauth} = require("./middlewares/auth")
+
+app.use("/admin",adminauth)
+app.get("/admin/getAllData",(req, res)=>{
+    res.send("User data send");
+})
+app.get("/user/data",userauth,(req,res)=>{
+    res.send("User data send");
+})
+
+app.get("/admin/deleteUser",(req, res)=>{
+    res.send("User deleted");
+    })
 
 app.get("/user",(req,res)=>{
     res.json({firstName:"Nikhitha",lastName:"Beeraka"});
 })
 app.post("/user",(req,res)=>{
     console.log("saved data successfully");
-    res.json("saved data to the DB");
+    res.status(200).json({message:"saved data into DB"})
 })
-app.get("/userr/:userid/:name/:password",(req,res)=>{
-    console.log(req.params)
-    res.send("goTTTTT itttttt")
-    })
-app.use("/user",(req,res)=>{
-    res.json("HAAAAAAAAAAAAAAAAA")
-    })
-app.delete("/user",(req,res)=>{
-res.json("deleted data successfully");
-})
-app.use("/test",(req,res)=>{
-    res.send("Hello world!");
-});
 
 app.listen(3000,()=>{
     console.log("Server is listening on port 3000")
