@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const userschema = new mongoose.Schema({
     firstName : 
@@ -16,7 +17,12 @@ const userschema = new mongoose.Schema({
         lowercase:true,
         required:true,
         trim:true,
-        unique:true
+        unique:true,
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error("Email id is not valid");
+            }
+        }
     },
     age:{
         type:Number,
@@ -24,7 +30,12 @@ const userschema = new mongoose.Schema({
     },
     password:{
         type:String,
-        required:true
+        required:true,
+        validate(value){
+            if(!validator.isStrongPassword(value)){
+                throw new Error("Strong password needed");
+            }
+        }
     },
     gender:{
         type:String,
@@ -35,7 +46,12 @@ const userschema = new mongoose.Schema({
         },
     },
     photoUrl:{
-        type:String
+        type:String,
+        validate(value){
+            if(!validator.isURL(value)){
+                throw new Error("photo can't be string");
+            }
+        }
     },
     about:{
         type:String,
@@ -43,6 +59,7 @@ const userschema = new mongoose.Schema({
     },
     skills:{
         type:[String],
+        validate: [val => val.length <= 10, 'Skills cannot exceed 10 items']
     },
 },
     {

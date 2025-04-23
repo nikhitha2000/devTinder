@@ -73,7 +73,7 @@ app.delete("/delete",async(req,res)=>{
 //update data of the user
 app.patch("/update",async(req,res)=>{
     try{
-        const user = await userModel.findByIdAndUpdate({_id:req.body._id},req.body,{new:true})
+        const user = await userModel.findByIdAndUpdate({_id:req.body._id},req.body,{new:true,runValidators: true})
         if(!user){
             res.status(400).json("User not found")
         }else{
@@ -88,7 +88,7 @@ app.patch("/update",async(req,res)=>{
 //finding the user via email and updating
 app.put("/Update",async(req,res)=>{
     try{
-        const user = await userModel.findOneAndUpdate({emailId:req.body.emailId},req.body,{new:true})
+        const user = await userModel.findOneAndUpdate({emailId:req.body.emailId},req.body,{new:true })
         if(!user){
             res.status(400).json("User not found")
         }else{
