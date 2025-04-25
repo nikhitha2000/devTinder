@@ -6,16 +6,33 @@ const app = express();
 app.use(express.json());
 
 const userModel = require("./models/user");
+const validatedata = require("./utils/validation");
+const bcrypt = require('bcrypt');
 
 
 app.post("/signup",async (req,res)=>{
     try{
-        const newUser = await userModel(req.body);
+        //whenever we register the data we have to validate the data
+        validatedata(req);
+        //encrypt the password
+        const { firstName, lastName, emailId, password, age, gender, photoUrl, skills } = req.body;
+        const passwordHash = await bcrypt.hash(password,10);
+        req.body.password = passwordHash;
+        const newUser = new userModel({
+            firstName,
+            lastName,
+            emailId,
+            password:passwordHash,
+            age,
+            gender,
+            photoUrl,
+            skills
+        });
         console.log(newUser);
         await newUser.save();
         res.status(200).json("user added successfully!!!")
     }catch(err){
-        res.status(400).json({message:"error",data:err});
+        res.status(400).send("ERROR:"+err.message);
     }
 })
 //get user by email
