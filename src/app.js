@@ -16,6 +16,10 @@ app.post("/signup",async (req,res)=>{
         validatedata(req);
         //encrypt the password
         const { firstName, lastName, emailId, password, age, gender, photoUrl, skills } = req.body;
+        const existinguser =  await userModel.findOne({emailId})
+            if(existinguser){
+                return res.status(500).json("User already exists");
+            }
         const passwordHash = await bcrypt.hash(password,10);
         req.body.password = passwordHash;
         const newUser = new userModel({
@@ -34,6 +38,26 @@ app.post("/signup",async (req,res)=>{
     }catch(err){
         res.status(400).send("ERROR:"+err.message);
     }
+})
+//login user
+app.post("/login",async(req,res)=>{
+try{
+    const{emailId,password} = req.body;
+    const user = await userModel.findOne({emailId})
+    if(!user){
+        return res.status(400).send("Invalid credentials")
+    }
+    const ispasswordValid = await bcrypt.compare(password,user.password);
+    if(!ispasswordValid){
+        return res.status(500).send("Invalid credentials")
+    }else{
+        res.status(200).send("login successfully");
+    }
+
+}catch(err){
+    res.status(400).send("Error",+err.message);
+}
+
 })
 //get user by email
 app.get("/GetByEmail",async(req,res)=>{
