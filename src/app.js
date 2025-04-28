@@ -2,8 +2,12 @@ const express = require('express');
 
 const connectDB= require("./config/database");
 const app = express();
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken")
+const userAuth = require("./middleware/auth");
 
 app.use(express.json());
+app.use(cookieParser());
 
 const userModel = require("./models/user");
 const validatedata = require("./utils/validation");
@@ -51,12 +55,32 @@ try{
     if(!ispasswordValid){
         return res.status(500).send("Invalid credentials")
     }else{
+        //create a jwt token
+        const token = await jwt.sign({_id:user._id},"Dev@123",{expiresIn:"1h"});
+        console.log(token);
+        res.cookie("token",token,{httpOnly:true,maxAge:60*60*1000})
         res.status(200).send("login successfully");
     }
 
 }catch(err){
-    res.status(400).send("Error",+err.message);
+    res.status(400).send("Error:"+err.message);
 }
+
+})
+
+app.get("/profile",userAuth,async(req,res)=>{
+    try{
+    const user = req.user;
+    res.send(user);
+}catch(err){
+    res.status(400).send("Error: "+err.message);
+}
+})
+
+app.post("/sendConnectionRequest",userAuth,async(req,res)=>{
+    const user = req.user;
+    console.log("sendibg connection request");
+    res.send(user.firstName + " sent the connection request")
 
 })
 //get user by email
