@@ -1,0 +1,3 @@
+if the user wants to communicate if the server then we use tcp protocol 
+user will go to the profile server opens with the profile and the connection gets closed 
+when ever we send login request the jwt token also sent in the backend and it stores as the cookie 
