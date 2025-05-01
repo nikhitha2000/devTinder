@@ -65,24 +65,23 @@ authRouter.post("/login", async (req, res) => {
   }
 });
 //forgot password
-authRouter.post("/forgotpassword",userAuth,async(req,res)=>{
-  try{
-    const {_id,newPassword} = req.body;
-    const user = await userModel.findOne({_id});
-    if(!user){
-      return res.status(500).send("Error Occuring while Updating:");
-    }else{
-      const hashedPassword = await bcrypt.hash(newPassword,10);
-      user.password = hashedPassword;
-      await user.save();
-      res.status(200).send(`${user.firstName} ${user.lastName},Your password updated Successfully`)
-    }
-  }catch(err){
-    res.status(400).send("Error:"+ err.message);
+authRouter.post("/forgotpassword", userAuth, async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    req.user.password = hashedPassword;
+    await req.user.save();
+    res
+      .status(200)
+      .send(
+        `${req.user.firstName} ${req.user.lastName},Your password updated Successfully`
+      );
+  } catch (err) {
+    res.status(400).send("Error:" + err.message);
   }
-})
+});
 //logout the user
-authRouter.post("/logout", userAuth,async (req, res) => {
+authRouter.post("/logout", userAuth, async (req, res) => {
   try {
     res.clearCookie("token");
     res.status(200).send("logout successfully");
