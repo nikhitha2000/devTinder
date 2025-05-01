@@ -3,6 +3,7 @@ const authRouter = express.Router();
 const bcrypt = require("bcrypt");
 const validatedata = require("../utils/validation");
 const userModel = require("../models/user");
+const userAuth = require("../middleware/auth");
 authRouter.post("/signup", async (req, res) => {
   try {
     //whenever we register the data we have to validate the data
@@ -63,7 +64,32 @@ authRouter.post("/login", async (req, res) => {
     res.status(400).send("Error:" + err.message);
   }
 });
-
+//forgot password
+authRouter.post("/forgotpassword",userAuth,async(req,res)=>{
+  try{
+    const {_id,newPassword} = req.body;
+    const user = await userModel.findOne({_id});
+    if(!user){
+      return res.status(500).send("Error Occuring while Updating:");
+    }else{
+      const hashedPassword = await bcrypt.hash(newPassword,10);
+      user.password = hashedPassword;
+      await user.save();
+      res.status(200).send(`${user.firstName} ${user.lastName},Your password updated Successfully`)
+    }
+  }catch(err){
+    res.status(400).send("Error:"+ err.message);
+  }
+})
+//logout the user
+authRouter.post("/logout", userAuth,async (req, res) => {
+  try {
+    res.clearCookie("token");
+    res.status(200).send("logout successfully");
+  } catch (err) {
+    res.status(400).send("Error:" + err.message);
+  }
+});
 //get user by email
 authRouter.get("/GetByEmail", async (req, res) => {
   try {

@@ -4,5 +4,9 @@ const ValidateData = (req) =>{
         throw new Error("All fields are mandatory to fill!!")
     }
 }
-
-module.exports = ValidateData
+const ValidateEditProfile = (req) =>{
+    const FieldsAllowed = ["firstName","lastName","age","gender","photoUrl","about","skills"];
+    const IsEditAllowed = Object.keys(req.body).every(field=>FieldsAllowed.includes(field));
+    return IsEditAllowed;
+}
+module.exports = ValidateData,ValidateEditProfile
