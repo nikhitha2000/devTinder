@@ -8,7 +8,6 @@ if(!token){
     throw new Error("Token is not valid")
 }
 const decodedobj = await jwt.verify(token,"Dev@123")
-console.log("decodedobj is printing",decodedobj)
 //validate the token
 const {_id} = decodedobj;
 const user = await userModel.findById(_id);

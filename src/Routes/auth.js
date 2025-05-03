@@ -65,19 +65,26 @@ authRouter.post("/login", async (req, res) => {
   }
 });
 //forgot password
-authRouter.post("/forgotpassword", userAuth, async (req, res) => {
+authRouter.post("/forgotpassword", async (req, res) => {
   try {
-    const { newPassword } = req.body;
+    const { _id, newPassword } = req.body;
+
+    if (!_id || !newPassword) {
+      return res.status(400).send("User ID and new password are required.");
+    }
+
+    const user = await userModel.findById(_id);
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    req.user.password = hashedPassword;
-    await req.user.save();
-    res
-      .status(200)
-      .send(
-        `${req.user.firstName} ${req.user.lastName},Your password updated Successfully`
-      );
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).send(`${user.firstName} ${user.lastName}, your password was updated successfully.`);
   } catch (err) {
-    res.status(400).send("Error:" + err.message);
+    res.status(400).send("Error: " + err.message);
   }
 });
 //logout the user
