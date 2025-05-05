@@ -127,14 +127,14 @@ authRouter.get("/GetById", async (req, res) => {
   }
 });
 //get all the users from the db
-authRouter.get("/feed", async (req, res) => {
-  try {
-    const user = await userModel.find();
-    res.status(200).json({ message: "success", data: user });
-  } catch (err) {
-    res.status(400).json({ message: "error", data: err });
-  }
-});
+// authRouter.get("/feed", async (req, res) => {
+//   try {
+//     const user = await userModel.find();
+//     res.status(200).json({ message: "success", data: user });
+//   } catch (err) {
+//     res.status(400).json({ message: "error", data: err });
+//   }
+// });
 
 //get the user and delete
 authRouter.delete("/delete", async (req, res) => {

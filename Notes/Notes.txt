@@ -1,3 +1,12 @@
 if the user wants to communicate if the server then we use tcp protocol 
 user will go to the profile server opens with the profile and the connection gets closed 
 when ever we send login request the jwt token also sent in the backend and it stores as the cookie 
+
+pagination --->theory
+-----------------------------------------------------------
+/feed?page=1&limit=10 => first 10 users 1-10
+/feed?page=2&limit=10 => 11-20
+.skip() ---->how many docs skip from the first
+.limit() ----> how many docs should be there
+.skip(0)&limit=10----> skip 0 and limit 10 give 1-10
+.skip(10)&limit=10---->gives from 11-20
