@@ -1,5 +1,26 @@
 # DevTinder
 
 - Created a vite + react project
--Remove unnecessary code and create a Hello World 
-- Created 
+- Remove unnecessary code and create a Hello World 
+- Install tailwind CSS
+- Install daisy UI
+- Add navbar component to App.jsx
+- create a navbar seperate component file
+- Install react router dom
+- Create a BrowserRouter > Routes > Route=/Body > RouteChildren
+- Create an outlet in your body component
+- Create a footer
+- Create a login page
+- Install axios
+- CORS- install cors in backend=> add the middleware  to with configurations:origin,credentials:true
+- whenever you're making an API call so pass axios=>{withcredentials:true}
+- Install react-redux + @reduxjs/toolkit => create a configureStore => Provider => create a slice and export the actions and add reducer to the store
+- Add redux devtools in chrome
+- Login and see if your data is coming properly in the store
+- NavBar should update as soon as userlogsin
+- Refactor our code to add constants file+ create a components folder
+- You should not be access other routes without login page
+- If token is not present,redirect user to login page
+- Logout Feature
+- Get the feed and add the feed in the store
+- 
