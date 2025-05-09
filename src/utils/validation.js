@@ -1,6 +1,6 @@
 const ValidateData = (req) =>{
-    const{firstName,lastName,emailId,age,password,gender,photoUrl,skills} = req.body;
-    if(!firstName||!lastName||!emailId||!age||!password||!gender||!photoUrl||!skills){
+    const{firstName,lastName,emailId,age,password,gender,photoUrl} = req.body;
+    if(!firstName||!lastName||!emailId||!age||!password||!gender||!photoUrl){
         throw new Error("All fields are mandatory to fill!!")
     }
 }

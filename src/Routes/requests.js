@@ -51,31 +51,36 @@ requestsRouter.post(
 );
 //review and accept the request
 requestsRouter.post(
-  "/request/review/:Status/:requestId",
+  "/request/review/:status/:requestId",
   userAuth,
   async (req, res) => {
     try {
       const loggedInUser = req.user;
-      const { Status, requestId } = req.params;
+      const { status, requestId } = req.params;
+
       const allowedStatus = ["accepted", "rejected"];
-      if (!allowedStatus.includes(Status)) {
-        return res.status(400).json({ message: "Status is not allowed" });
+      if (!allowedStatus.includes(status)) {
+        return res.status(400).json({ message: "Status not allowed!" });
       }
+
       const connectionRequest = await ConnectionRequest.findOne({
         _id: requestId,
         ToUserId: loggedInUser._id,
         Status: "interested",
       });
       if (!connectionRequest) {
-        return res.status(500).json({ message: "Connection Requests not found" });
+        return res
+          .status(404)
+          .json({ message: "Connection request not found" });
       }
-      connectionRequest.Status = Status;
+
+      connectionRequest.Status = status;
+
       const data = await connectionRequest.save();
-      res
-        .status(200)
-        .json({ message: "connection Request " + Status, data: data });
+
+      res.json({ message: "Connection request " + status, data });
     } catch (err) {
-      res.status(400).json({ message: "Error" + err.message });
+      res.status(400).send("ERROR: " + err.message);
     }
   }
 );

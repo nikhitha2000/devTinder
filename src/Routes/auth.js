@@ -17,7 +17,6 @@ authRouter.post("/signup", async (req, res) => {
       age,
       gender,
       photoUrl,
-      skills,
     } = req.body;
     const existinguser = await userModel.findOne({ emailId });
     if (existinguser) {
@@ -33,11 +32,14 @@ authRouter.post("/signup", async (req, res) => {
       age,
       gender,
       photoUrl,
-      skills,
     });
     console.log(newUser);
-    await newUser.save();
-    res.status(200).json("user added successfully!!!");
+    const savedUser = await newUser.save();
+    const token = await savedUser.getJWT();
+    res.cookie("token", token, { httpOnly: true, maxAge: 60 * 60 * 1000 });
+    res
+      .status(200)
+      .json({ message: "user added successfully!!!", data: savedUser });
   } catch (err) {
     res.status(400).send("ERROR:" + err.message);
   }
@@ -82,7 +84,11 @@ authRouter.post("/forgotpassword", async (req, res) => {
     user.password = hashedPassword;
     await user.save();
 
-    res.status(200).send(`${user.firstName} ${user.lastName}, your password was updated successfully.`);
+    res
+      .status(200)
+      .send(
+        `${user.firstName} ${user.lastName}, your password was updated successfully.`
+      );
   } catch (err) {
     res.status(400).send("Error: " + err.message);
   }
