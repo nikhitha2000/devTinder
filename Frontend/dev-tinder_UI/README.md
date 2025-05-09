@@ -23,4 +23,11 @@
 - If token is not present,redirect user to login page
 - Logout Feature
 - Get the feed and add the feed in the store
-- 
+- build the usercard on feed
+- edit profile feature
+- Show Toast message on save of profile
+- New page- See all my connections 
+- new Page - see all my connection Requests
+- Feature - Accept/Reject connection Request
+- Send/Ignore the user card from the feed
+- Signup New User
